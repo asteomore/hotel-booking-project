@@ -6,4 +6,3 @@ app = FastAPI()
 
 app.include_router(rooms_router)
 app.include_router(booking_router)
-

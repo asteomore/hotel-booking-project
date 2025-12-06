@@ -15,15 +15,20 @@ def clear_db():
     finally:
         db.close()
 
+
 @pytest.fixture()
 def api_client():
     return TestClient(app)
 
+
 @pytest.fixture()
 def room_id(api_client):
-    test_room = api_client.post("/rooms/create", json={"description": "test room", "price": "100.99"})
+    test_room = api_client.post(
+        "/rooms/create", json={"description": "test room", "price": "100.99"}
+    )
     assert test_room.status_code == 200
     return test_room.json()["room_id"]
+
 
 @pytest.fixture()
 def booking_id(api_client, room_id):

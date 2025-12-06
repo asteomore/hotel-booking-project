@@ -6,11 +6,9 @@ from src.models import Room, Booking
 
 router = APIRouter(prefix="/rooms", tags=["rooms"])
 
+
 @router.get("/list", response_model=list[RoomOut])
-def get_rooms(
-        sort_by: str | None = None,
-        order: str | None = None
-) -> list[RoomOut]:
+def get_rooms(sort_by: str | None = None, order: str | None = None) -> list[RoomOut]:
     db = SessionLocal()
     try:
         query = db.query(Room)
@@ -26,23 +24,24 @@ def get_rooms(
         rooms = query.all()
         return [
             RoomOut(
-                id = room.id,
-                description = room.description,
-                price = room.price,
-                created_at = room.created_at,
+                id=room.id,
+                description=room.description,
+                price=room.price,
+                created_at=room.created_at,
             )
             for room in rooms
         ]
     finally:
         db.close()
 
+
 @router.post("/create")
 def post_rooms(room: RoomCreate) -> dict[str, int]:
     db = SessionLocal()
     try:
         db_room = Room(
-        description=room.description,
-        price=room.price,
+            description=room.description,
+            price=room.price,
         )
         db.add(db_room)
         db.commit()
@@ -50,6 +49,7 @@ def post_rooms(room: RoomCreate) -> dict[str, int]:
         return {"room_id": db_room.id}
     finally:
         db.close()
+
 
 @router.delete("/delete")
 def delete_rooms(room_id: int) -> dict[str, str]:
@@ -65,4 +65,3 @@ def delete_rooms(room_id: int) -> dict[str, str]:
             raise HTTPException(status_code=404, detail="room not found")
     finally:
         db.close()
-

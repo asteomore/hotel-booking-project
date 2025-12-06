@@ -7,6 +7,7 @@ from src.schemas import BookingOut
 
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
+
 @router.get("/list", response_model=list[BookingOut])
 def get_bookings(room_id: int) -> list[BookingOut]:
     db = SessionLocal()
@@ -19,14 +20,15 @@ def get_bookings(room_id: int) -> list[BookingOut]:
         )
         return [
             BookingOut(
-                booking_id = b.id,
-                date_start = b.date_start,
-                date_end = b.date_end,
+                booking_id=b.id,
+                date_start=b.date_start,
+                date_end=b.date_end,
             )
             for b in bookings
         ]
     finally:
         db.close()
+
 
 @router.post("/create")
 def post_booking(
@@ -35,7 +37,9 @@ def post_booking(
     date_end: date = Form(...),
 ) -> dict[str, int]:
     if date_end < date_start:
-        raise HTTPException(status_code=400, detail="date_end must be equal or after date_start")
+        raise HTTPException(
+            status_code=400, detail="date_end must be equal or after date_start"
+        )
 
     db = SessionLocal()
     try:
@@ -46,7 +50,9 @@ def post_booking(
             .all()
         )
         for booking in bookings:
-            overbooked: bool = not (date_end < booking.date_start or date_start > booking.date_end)
+            overbooked: bool = not (
+                date_end < booking.date_start or date_start > booking.date_end
+            )
             if overbooked:
                 raise HTTPException(status_code=400, detail="room is already booked")
 
@@ -61,7 +67,6 @@ def post_booking(
         return {"booking_id": db_booking.id}
     finally:
         db.close()
-
 
 
 @router.delete("/delete")

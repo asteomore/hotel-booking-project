@@ -1,7 +1,9 @@
 from datetime import date, datetime
 from decimal import Decimal
-from sqlalchemy import Column, Integer, String, Numeric, Date, DateTime, ForeignKey
+
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.sql import func
+
 from src.database import Base
 
 

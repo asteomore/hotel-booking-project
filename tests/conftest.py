@@ -1,8 +1,8 @@
-from fastapi.testclient import TestClient
-from src.main import app
 import pytest
+from fastapi.testclient import TestClient
 from src.database import SessionLocal
-from src.models import Room, Booking
+from src.main import app
+from src.models import Booking, Room
 
 
 @pytest.fixture(autouse=True)

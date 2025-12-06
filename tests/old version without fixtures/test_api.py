@@ -1,8 +1,10 @@
-from fastapi.testclient import TestClient
-from src.main import app
+from decimal import Decimal
+
 import pytest
+from fastapi.testclient import TestClient
 from src.database import SessionLocal
-from src.models import Room, Booking
+from src.main import app
+from src.models import Booking, Room
 
 client = TestClient(app)
 
@@ -19,9 +21,7 @@ def clear_db():
 
 
 def test_create_room_and_booking():
-    test_room = client.post(
-        "/rooms/create", json={"description": "test room", "price": 100.99}
-    )
+    test_room = client.post("/rooms/create", json={"description": "test room", "price": 100.99})
     assert test_room.status_code == 200
     room_id = test_room.json()["room_id"]
     assert isinstance(room_id, int)
@@ -48,9 +48,7 @@ def test_create_room_and_booking():
 
 
 def test_delete_booking(clear_db):
-    test_room = client.post(
-        "/rooms/create", json={"description": "test room", "price": 100.99}
-    )
+    test_room = client.post("/rooms/create", json={"description": "test room", "price": 100.99})
     assert test_room.status_code == 200
     room_id = test_room.json()["room_id"]
 
@@ -76,9 +74,7 @@ def test_delete_booking(clear_db):
 
 
 def test_delete_room_and_also_booking(clear_db):
-    test_room = client.post(
-        "/rooms/create", json={"description": "test room", "price": 100.99}
-    )
+    test_room = client.post("/rooms/create", json={"description": "test room", "price": 100.99})
     assert test_room.status_code == 200
     room_id = test_room.json()["room_id"]
 
@@ -120,77 +116,51 @@ def test_delete_not_existent_booking(clear_db):
 
 
 def test_rooms_sorted_by_price_asc(clear_db):
-    test_room1 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500.99}
-    )
+    test_room3 = client.post("/rooms/create", json={"description": "test room", "price": 500.99})
     assert test_room3.status_code == 200
-    test_room4 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 501}
-    )
+    test_room4 = client.post("/rooms/create", json={"description": "test room", "price": 501})
     assert test_room4.status_code == 200
     get_room = client.get("/rooms/list", params={"sort_by": "price", "order": "asc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     prices = []
     for room in rooms:
-        prices.append(room["price"])
+        prices.append(Decimal(room["price"]))
     assert prices == sorted(prices)
 
 
 def test_rooms_sorted_by_price_desc(clear_db):
-    test_room1 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500.99}
-    )
+    test_room3 = client.post("/rooms/create", json={"description": "test room", "price": 500.99})
     assert test_room3.status_code == 200
-    test_room4 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 501}
-    )
+    test_room4 = client.post("/rooms/create", json={"description": "test room", "price": 501})
     assert test_room4.status_code == 200
     get_room = client.get("/rooms/list", params={"sort_by": "price", "order": "desc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     prices = []
     for room in rooms:
-        prices.append(room["price"])
+        prices.append(Decimal(room["price"]))
     assert prices == sorted(prices, reverse=True)
 
 
 def test_rooms_sorted_by_created_date_asc(clear_db):
-    test_room1 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 200}
-    )
+    test_room3 = client.post("/rooms/create", json={"description": "test room", "price": 200})
     assert test_room3.status_code == 200
-    test_room4 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 10}
-    )
+    test_room4 = client.post("/rooms/create", json={"description": "test room", "price": 10})
     assert test_room4.status_code == 200
-    get_room = client.get(
-        "/rooms/list", params={"sort_by": "created_at", "order": "asc"}
-    )
+    get_room = client.get("/rooms/list", params={"sort_by": "created_at", "order": "asc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     dates = []
@@ -200,25 +170,15 @@ def test_rooms_sorted_by_created_date_asc(clear_db):
 
 
 def test_rooms_sorted_by_created_date_desc(clear_db):
-    test_room1 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 200}
-    )
+    test_room3 = client.post("/rooms/create", json={"description": "test room", "price": 200})
     assert test_room3.status_code == 200
-    test_room4 = client.post(
-        "/rooms/create", json={"description": "test room", "price": 10}
-    )
+    test_room4 = client.post("/rooms/create", json={"description": "test room", "price": 10})
     assert test_room4.status_code == 200
-    get_room = client.get(
-        "/rooms/list", params={"sort_by": "created_at", "order": "desc"}
-    )
+    get_room = client.get("/rooms/list", params={"sort_by": "created_at", "order": "desc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     dates = []
@@ -228,9 +188,7 @@ def test_rooms_sorted_by_created_date_desc(clear_db):
 
 
 def test_post_overbooked(clear_db):
-    test_room = client.post(
-        "/rooms/create", json={"description": "test room", "price": 100.99}
-    )
+    test_room = client.post("/rooms/create", json={"description": "test room", "price": 100.99})
     assert test_room.status_code == 200
     room_id = test_room.json()["room_id"]
 

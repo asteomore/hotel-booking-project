@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
 from src.database import SessionLocal
+from src.models import Booking, Room
 from src.schemas import RoomCreate, RoomOut
-from src.models import Room, Booking
 
 router = APIRouter(prefix="/rooms", tags=["rooms"])
 

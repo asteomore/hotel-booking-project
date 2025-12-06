@@ -51,25 +51,17 @@ def test_delete_not_existent_booking(clear_db, api_client):
 
 
 def test_rooms_sorted_by_price_asc(clear_db, api_client):
-    test_room1 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = api_client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = api_client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
     test_room3 = api_client.post(
         "/rooms/create", json={"description": "test room", "price": 500.99}
     )
     assert test_room3.status_code == 200
-    test_room4 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 501}
-    )
+    test_room4 = api_client.post("/rooms/create", json={"description": "test room", "price": 501})
     assert test_room4.status_code == 200
-    get_room = api_client.get(
-        "/rooms/list", params={"sort_by": "price", "order": "asc"}
-    )
+    get_room = api_client.get("/rooms/list", params={"sort_by": "price", "order": "asc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     prices = []
@@ -79,25 +71,17 @@ def test_rooms_sorted_by_price_asc(clear_db, api_client):
 
 
 def test_rooms_sorted_by_price_desc(clear_db, api_client):
-    test_room1 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = api_client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = api_client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
     test_room3 = api_client.post(
         "/rooms/create", json={"description": "test room", "price": 500.99}
     )
     assert test_room3.status_code == 200
-    test_room4 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 501}
-    )
+    test_room4 = api_client.post("/rooms/create", json={"description": "test room", "price": 501})
     assert test_room4.status_code == 200
-    get_room = api_client.get(
-        "/rooms/list", params={"sort_by": "price", "order": "desc"}
-    )
+    get_room = api_client.get("/rooms/list", params={"sort_by": "price", "order": "desc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     prices = []
@@ -107,25 +91,15 @@ def test_rooms_sorted_by_price_desc(clear_db, api_client):
 
 
 def test_rooms_sorted_by_created_date_asc(clear_db, api_client):
-    test_room1 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = api_client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = api_client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 200}
-    )
+    test_room3 = api_client.post("/rooms/create", json={"description": "test room", "price": 200})
     assert test_room3.status_code == 200
-    test_room4 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 10}
-    )
+    test_room4 = api_client.post("/rooms/create", json={"description": "test room", "price": 10})
     assert test_room4.status_code == 200
-    get_room = api_client.get(
-        "/rooms/list", params={"sort_by": "created_at", "order": "asc"}
-    )
+    get_room = api_client.get("/rooms/list", params={"sort_by": "created_at", "order": "asc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     dates = []
@@ -135,25 +109,15 @@ def test_rooms_sorted_by_created_date_asc(clear_db, api_client):
 
 
 def test_rooms_sorted_by_created_date_desc(clear_db, api_client):
-    test_room1 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 500}
-    )
+    test_room1 = api_client.post("/rooms/create", json={"description": "test room", "price": 500})
     assert test_room1.status_code == 200
-    test_room2 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 1000}
-    )
+    test_room2 = api_client.post("/rooms/create", json={"description": "test room", "price": 1000})
     assert test_room2.status_code == 200
-    test_room3 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 200}
-    )
+    test_room3 = api_client.post("/rooms/create", json={"description": "test room", "price": 200})
     assert test_room3.status_code == 200
-    test_room4 = api_client.post(
-        "/rooms/create", json={"description": "test room", "price": 10}
-    )
+    test_room4 = api_client.post("/rooms/create", json={"description": "test room", "price": 10})
     assert test_room4.status_code == 200
-    get_room = api_client.get(
-        "/rooms/list", params={"sort_by": "created_at", "order": "desc"}
-    )
+    get_room = api_client.get("/rooms/list", params={"sort_by": "created_at", "order": "desc"})
     assert get_room.status_code == 200
     rooms = get_room.json()
     dates = []

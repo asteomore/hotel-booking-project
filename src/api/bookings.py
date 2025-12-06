@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, Form
 from datetime import date
+
+from fastapi import APIRouter, Form, HTTPException
 
 from src.database import SessionLocal
 from src.models import Booking
@@ -37,9 +38,7 @@ def post_booking(
     date_end: date = Form(...),
 ) -> dict[str, int]:
     if date_end < date_start:
-        raise HTTPException(
-            status_code=400, detail="date_end must be equal or after date_start"
-        )
+        raise HTTPException(status_code=400, detail="date_end must be equal or after date_start")
 
     db = SessionLocal()
     try:
@@ -50,9 +49,7 @@ def post_booking(
             .all()
         )
         for booking in bookings:
-            overbooked: bool = not (
-                date_end < booking.date_start or date_start > booking.date_end
-            )
+            overbooked: bool = not (date_end < booking.date_start or date_start > booking.date_end)
             if overbooked:
                 raise HTTPException(status_code=400, detail="room is already booked")
 

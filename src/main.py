@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from src.api.rooms import router as rooms_router
+
 from src.api.bookings import router as booking_router
+from src.api.rooms import router as rooms_router
 
 app = FastAPI()
 

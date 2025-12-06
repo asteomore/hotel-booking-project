@@ -1,0 +1,23 @@
+
+services:
+  db:
+    image: postgres:17
+    container_name: hotel_db
+    environment:
+      POSTGRES_DB: hotel_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    container_name: hotel_app
+    env_file:
+      - .env.docker
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
